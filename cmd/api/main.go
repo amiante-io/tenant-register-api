@@ -22,7 +22,7 @@ func main() {
 	flag.IntVar(&cfg.port, "port", 4000, "Server port")
 	flag.Parse()
 
-	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
+	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
 		AddSource: true,
 		Level:     slog.LevelInfo,
 	}))
@@ -37,6 +37,7 @@ func main() {
 		Handler: app.routes(),
 	}
 
+	logger.Info("starting server", "addr", srv.Addr)
 	err := srv.ListenAndServe()
 	logger.Error(err.Error())
 	os.Exit(1)

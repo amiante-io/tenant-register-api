@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"net/http"
 )
 
@@ -10,12 +9,8 @@ type Tenant struct {
 }
 
 func (app *application) register(w http.ResponseWriter, r *http.Request) {
-	js, err := json.MarshalIndent(Tenant{Name: "tenant-test"}, "", "\n")
+	err := app.writeJson(w, http.StatusOK, &Tenant{Name: "tenant-test"}, nil)
 	if err != nil {
-		// todo handle error
-		panic(err)
+		app.serverErrorResponse(w, r, err)
 	}
-
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(js)
 }
